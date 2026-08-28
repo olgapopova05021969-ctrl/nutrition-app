@@ -197,6 +197,79 @@
       grid-template-columns:1fr 1fr;
       gap:8px;
     }
+
+    .tabs{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:6px;
+      margin:6px 0 14px;
+    }
+
+    .tab-btn{
+      margin:0;
+      padding:11px 8px;
+      font-size:14px;
+      background:var(--beige);
+      color:var(--text);
+    }
+
+    .tab-btn.active{
+      background:var(--green);
+      color:#fff;
+      font-weight:700;
+    }
+
+    .tab-panel{display:none}
+    .tab-panel.active{display:block}
+
+    .ingredient-row{
+      display:grid;
+      grid-template-columns:1fr 96px 42px;
+      gap:7px;
+      margin-bottom:8px;
+      align-items:center;
+    }
+
+    .ingredient-row input{
+      margin:0;
+    }
+
+    .ingredient-remove{
+      width:42px;
+      height:42px;
+      padding:0;
+      margin:0;
+      border-radius:12px;
+      background:var(--red-soft);
+      color:var(--red);
+      font-size:20px;
+    }
+
+    .recipe-item{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      margin-bottom:10px;
+      background:#fff;
+    }
+
+    .recipe-actions{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:8px;
+      margin-top:10px;
+    }
+
+    .recipe-actions button{
+      margin:0;
+    }
+
+    .recipe-meta{
+      font-size:14px;
+      color:var(--muted);
+      margin-top:5px;
+      line-height:1.4;
+    }
   </style>
 </head>
 
@@ -325,30 +398,74 @@
     <div class="card form-card" id="foodForm">
       <h2>Добавить еду</h2>
 
-      <label for="foodName">Что вы съели?</label>
-      <input id="foodName" type="text" placeholder="Например: борщ, сырники, йогурт, гречка">
+      <div class="tabs">
+        <button type="button" class="tab-btn active" data-food-tab="simple">Продукт</button>
+        <button type="button" class="tab-btn" data-food-tab="complex">Блюдо</button>
+        <button type="button" class="tab-btn" data-food-tab="recipes">Мои рецепты</button>
+      </div>
 
-      <label for="foodAmount">Количество</label>
-      <input id="foodAmount" type="text" placeholder="Например: 300 г, 250 мл или 2 шт">
+      <div class="tab-panel active" id="foodTabSimple">
+        <label for="foodName">Что вы съели?</label>
+        <input id="foodName" type="text" placeholder="Например: борщ, сырники, йогурт">
 
-      <label for="mealType">Приём пищи</label>
-      <select id="mealType">
-        <option>Завтрак</option>
-        <option>Перекус</option>
-        <option>Обед</option>
-        <option>Ужин</option>
-        <option>Сладкое</option>
-      </select>
+        <label for="foodAmount">Количество</label>
+        <input id="foodAmount" type="text" placeholder="Например: 300 г, 250 мл или 2 шт">
 
-      <button class="primary" id="findFoodBtn">Найти и добавить</button>
+        <label for="mealType">Приём пищи</label>
+        <select id="mealType">
+          <option>Завтрак</option>
+          <option>Перекус</option>
+          <option>Обед</option>
+          <option>Ужин</option>
+          <option>Сладкое</option>
+        </select>
 
-      <div class="result" id="foodResult"></div>
-      <div id="foodChoices"></div>
+        <button class="primary" id="findFoodBtn">Найти и добавить</button>
 
-      <p class="note">
-        Домашние блюда считаются ориентировочно. Для магазинных продуктов
-        приложение при наличии интернета ищет данные в Open Food Facts.
-      </p>
+        <div class="result" id="foodResult"></div>
+        <div id="foodChoices"></div>
+
+        <p class="note">
+          Домашние блюда считаются ориентировочно. Для магазинных продуктов
+          приложение при наличии интернета ищет данные в Open Food Facts.
+        </p>
+      </div>
+
+      <div class="tab-panel" id="foodTabComplex">
+        <label for="complexDishName">Название блюда</label>
+        <input id="complexDishName" type="text" placeholder="Например: творог с ягодами">
+
+        <label>Ингредиенты</label>
+        <div id="ingredientRows"></div>
+
+        <button type="button" class="ghost" id="addIngredientBtn">+ Добавить ингредиент</button>
+
+        <label for="complexMealType">Приём пищи</label>
+        <select id="complexMealType">
+          <option>Завтрак</option>
+          <option>Перекус</option>
+          <option>Обед</option>
+          <option>Ужин</option>
+          <option>Сладкое</option>
+        </select>
+
+        <div class="two">
+          <button class="primary" id="calculateComplexBtn" type="button">Рассчитать блюдо</button>
+          <button class="ghost" id="saveRecipeBtn" type="button">Сохранить рецепт</button>
+        </div>
+
+        <div class="result" id="complexResult"></div>
+        <div id="complexChoices"></div>
+
+        <p class="note">
+          Каждый ингредиент считается отдельно, затем приложение складывает калории и белок.
+        </p>
+      </div>
+
+      <div class="tab-panel" id="foodTabRecipes">
+        <div id="recipesList"></div>
+        <p class="note">Сохранённые рецепты остаются только на этом устройстве.</p>
+      </div>
     </div>
 
     <button class="secondary" id="suggestFoodBtn">Что мне поесть?</button>
@@ -512,7 +629,18 @@ const foodDB = {
   "салат оливье": {c:190,p:5,u:"100g",approx:true},
   "оливье": {c:190,p:5,u:"100g",approx:true},
   "винегрет": {c:120,p:2,u:"100g",approx:true},
-  "цезарь с курицей": {c:180,p:12,u:"100g",approx:true}
+  "цезарь с курицей": {c:180,p:12,u:"100g",approx:true},
+  "ягоды": {c:45,p:1,u:"100g"},
+  "клубника": {c:32,p:.7,u:"100g"},
+  "малина": {c:52,p:1.2,u:"100g"},
+  "черника": {c:57,p:.7,u:"100g"},
+  "смородина": {c:44,p:1,u:"100g"},
+  "мед": {c:304,p:.3,u:"100g"},
+  "мёд": {c:304,p:.3,u:"100g"},
+  "сметана": {c:206,p:2.8,u:"100g"},
+  "орехи": {c:607,p:20,u:"100g"},
+  "грецкие орехи": {c:654,p:15,u:"100g"},
+  "изюм": {c:299,p:3.1,u:"100g"}
 };
 
 const today = () => new Date().toLocaleDateString("ru-RU");
@@ -725,7 +853,11 @@ function resolveBuiltInProduct(name){
     "болгарский перец":"сладкий перец",
     "борщ домашний":"борщ",
     "суп с курицей":"куриный суп",
-    "пюре":"картофельное пюре"
+    "пюре":"картофельное пюре",
+    "ягода":"ягоды",
+    "лесные ягоды":"ягоды",
+    "мёд":"мед",
+    "грецкий орех":"грецкие орехи"
   };
 
   const key = foodDB[normalized] ? normalized : aliases[normalized];
@@ -923,6 +1055,343 @@ document.getElementById("findFoodBtn").addEventListener("click", async () => {
       "Сейчас не удалось подключиться к онлайн-справочнику. Проверьте интернет и попробуйте ещё раз.";
   }
 });
+
+
+// ===== Вкладки "Добавить еду" =====
+document.querySelectorAll("[data-food-tab]").forEach(button => {
+  button.addEventListener("click", () => {
+    const tab = button.dataset.foodTab;
+
+    document.querySelectorAll("[data-food-tab]").forEach(b => b.classList.remove("active"));
+    button.classList.add("active");
+
+    document.getElementById("foodTabSimple").classList.toggle("active", tab === "simple");
+    document.getElementById("foodTabComplex").classList.toggle("active", tab === "complex");
+    document.getElementById("foodTabRecipes").classList.toggle("active", tab === "recipes");
+
+    if(tab === "recipes") renderRecipes();
+  });
+});
+
+// ===== Конструктор сложного блюда =====
+function createIngredientRow(name = "", amount = ""){
+  const row = document.createElement("div");
+  row.className = "ingredient-row";
+
+  row.innerHTML = `
+    <input class="ingredient-name" type="text" placeholder="Ингредиент" value="${String(name).replace(/"/g, "&quot;")}">
+    <input class="ingredient-amount" type="text" placeholder="г/шт" value="${String(amount).replace(/"/g, "&quot;")}">
+    <button type="button" class="ingredient-remove" aria-label="Удалить">×</button>
+  `;
+
+  row.querySelector(".ingredient-remove").addEventListener("click", () => {
+    row.remove();
+
+    if(!document.querySelector("#ingredientRows .ingredient-row")){
+      addIngredientRow();
+    }
+  });
+
+  document.getElementById("ingredientRows").appendChild(row);
+}
+
+function addIngredientRow(name = "", amount = ""){
+  createIngredientRow(name, amount);
+}
+
+document.getElementById("addIngredientBtn").addEventListener("click", () => addIngredientRow());
+
+function getIngredientInputs(){
+  return [...document.querySelectorAll("#ingredientRows .ingredient-row")]
+    .map(row => ({
+      name: row.querySelector(".ingredient-name").value.trim(),
+      amountText: row.querySelector(".ingredient-amount").value.trim()
+    }))
+    .filter(item => item.name || item.amountText);
+}
+
+function resolveIngredientLocally(name, amountText){
+  const product = resolveBuiltInProduct(name);
+  const amount = parseAmount(amountText);
+
+  if(!product || !amount || amount <= 0){
+    return null;
+  }
+
+  const nutrition = calculateNutrition(product, amount);
+
+  return {
+    originalName: name,
+    displayName: name,
+    amountText,
+    calories: nutrition.calories,
+    protein: nutrition.protein,
+    approximate: !!product.approx,
+    source: "built-in"
+  };
+}
+
+async function resolveIngredientOnline(name, amountText){
+  const amount = parseAmount(amountText);
+  if(!amount || amount <= 0) return null;
+
+  const products = await searchOpenFoodFacts(name);
+  if(!products.length) return null;
+
+  const product = products[0];
+  const nutrition = calculateNutrition(product, amount);
+
+  return {
+    originalName: name,
+    displayName: product.name || name,
+    amountText,
+    calories: nutrition.calories,
+    protein: nutrition.protein,
+    approximate: false,
+    source: "openfoodfacts"
+  };
+}
+
+async function resolveComplexDish(showProgress = true){
+  const dishName = document.getElementById("complexDishName").value.trim();
+  const items = getIngredientInputs();
+  const result = document.getElementById("complexResult");
+
+  result.style.display = "block";
+  document.getElementById("complexChoices").innerHTML = "";
+
+  if(!dishName){
+    result.textContent = "Введите название блюда.";
+    return null;
+  }
+
+  if(!items.length){
+    result.textContent = "Добавьте хотя бы один ингредиент.";
+    return null;
+  }
+
+  for(const item of items){
+    if(!item.name || !parseAmount(item.amountText)){
+      result.textContent = "Для каждого ингредиента укажите название и количество.";
+      return null;
+    }
+  }
+
+  const resolved = [];
+  const notFound = [];
+
+  for(const item of items){
+    const local = resolveIngredientLocally(item.name, item.amountText);
+
+    if(local){
+      resolved.push(local);
+      continue;
+    }
+
+    if(showProgress){
+      result.innerHTML = `Ищу данные для: <strong>${item.name}</strong>…`;
+    }
+
+    try{
+      const online = await resolveIngredientOnline(item.name, item.amountText);
+      if(online) resolved.push(online);
+      else notFound.push(item);
+    }catch{
+      notFound.push(item);
+    }
+  }
+
+  if(notFound.length){
+    result.innerHTML = `
+      <strong>Не удалось рассчитать всё блюдо.</strong><br>
+      Не найдены: ${notFound.map(x => x.name).join(", ")}.<br>
+      Попробуйте более простое название продукта или укажите бренд.
+    `;
+    return null;
+  }
+
+  const calories = Math.round(resolved.reduce((sum, x) => sum + x.calories, 0));
+  const protein = Number(resolved.reduce((sum, x) => sum + x.protein, 0).toFixed(1));
+  const approximate = resolved.some(x => x.approximate);
+
+  const totalWeight = items.reduce((sum, x) => {
+    const amount = parseAmount(x.amountText);
+    const looksLikePiece = /шт|яйц/i.test(x.amountText);
+    return sum + (looksLikePiece ? 0 : (amount || 0));
+  }, 0);
+
+  return {
+    dishName,
+    ingredients: resolved,
+    calories,
+    protein,
+    approximate,
+    totalWeight
+  };
+}
+
+function renderComplexSummary(data, mode = "calculate"){
+  const result = document.getElementById("complexResult");
+  result.style.display = "block";
+
+  const ingredientLines = data.ingredients.map(item =>
+    `${item.displayName} — ${item.amountText}: ${item.approximate ? "≈ " : ""}${item.calories} ккал, ${item.approximate ? "≈ " : ""}${item.protein} г белка`
+  ).join("<br>");
+
+  const per100 = data.totalWeight > 0
+    ? {
+        calories: Math.round(data.calories * 100 / data.totalWeight),
+        protein: Number((data.protein * 100 / data.totalWeight).toFixed(1))
+      }
+    : null;
+
+  result.innerHTML = `
+    <strong>${data.dishName}</strong><br><br>
+    ${ingredientLines}<br><br>
+    <strong>Итого:</strong>
+    ${data.approximate ? "≈ " : ""}${data.calories} ккал ·
+    ${data.approximate ? "≈ " : ""}${data.protein} г белка
+    ${per100 ? `<br><span class="muted">На 100 г: ≈ ${per100.calories} ккал · ≈ ${per100.protein} г белка</span>` : ""}
+  `;
+
+  if(mode === "calculate"){
+    const addBtn = document.createElement("button");
+    addBtn.type = "button";
+    addBtn.className = "primary";
+    addBtn.textContent = "Добавить блюдо в дневник";
+
+    addBtn.addEventListener("click", () => {
+      const diary = read("foodDiary", []);
+
+      diary.push({
+        date: today(),
+        meal: document.getElementById("complexMealType").value,
+        food: data.dishName,
+        amount: data.totalWeight > 0 ? `${Math.round(data.totalWeight)} г` : "1 порция",
+        calories: data.calories,
+        protein: data.protein,
+        source: "complex",
+        approximate: data.approximate,
+        ingredients: data.ingredients
+      });
+
+      write("foodDiary", diary);
+      showToday();
+
+      result.innerHTML += "<br><br><strong>Блюдо добавлено в дневник.</strong>";
+    });
+
+    result.appendChild(addBtn);
+  }
+}
+
+document.getElementById("calculateComplexBtn").addEventListener("click", async () => {
+  const data = await resolveComplexDish(true);
+  if(data) renderComplexSummary(data, "calculate");
+});
+
+document.getElementById("saveRecipeBtn").addEventListener("click", async () => {
+  const data = await resolveComplexDish(true);
+  if(!data) return;
+
+  const recipes = read("myRecipes", []);
+  const recipe = {
+    id: Date.now(),
+    name: data.dishName,
+    ingredients: data.ingredients.map(x => ({
+      name: x.originalName || x.displayName,
+      amountText: x.amountText
+    })),
+    calories: data.calories,
+    protein: data.protein,
+    approximate: data.approximate,
+    totalWeight: data.totalWeight
+  };
+
+  const existing = recipes.findIndex(r =>
+    normalizeFoodName(r.name) === normalizeFoodName(recipe.name)
+  );
+
+  if(existing >= 0) recipes[existing] = recipe;
+  else recipes.push(recipe);
+
+  write("myRecipes", recipes);
+
+  renderComplexSummary(data, "saved");
+  document.getElementById("complexResult").innerHTML += "<br><br><strong>Рецепт сохранён.</strong>";
+});
+
+function renderRecipes(){
+  const list = document.getElementById("recipesList");
+  const recipes = read("myRecipes", []);
+
+  if(!recipes.length){
+    list.innerHTML = `
+      <p>Пока нет сохранённых рецептов.</p>
+      <p class="muted">Создайте сложное блюдо во вкладке «Блюдо» и нажмите «Сохранить рецепт».</p>
+    `;
+    return;
+  }
+
+  list.innerHTML = recipes.map((recipe, index) => `
+    <div class="recipe-item">
+      <strong>${recipe.name}</strong>
+      <div class="recipe-meta">
+        ${recipe.approximate ? "≈ " : ""}${recipe.calories} ккал ·
+        ${recipe.approximate ? "≈ " : ""}${recipe.protein} г белка
+        ${recipe.totalWeight ? ` · ${Math.round(recipe.totalWeight)} г` : ""}
+      </div>
+      <div class="recipe-meta">
+        ${recipe.ingredients.map(i => `${i.name} ${i.amountText}`).join(" + ")}
+      </div>
+      <div class="recipe-actions">
+        <button type="button" class="primary recipe-add" data-recipe="${index}">Добавить в дневник</button>
+        <button type="button" class="small delete recipe-delete" data-recipe="${index}">Удалить</button>
+      </div>
+    </div>
+  `).join("");
+
+  list.querySelectorAll(".recipe-add").forEach(button => {
+    button.addEventListener("click", () => {
+      const recipe = read("myRecipes", [])[Number(button.dataset.recipe)];
+      if(!recipe) return;
+
+      const diary = read("foodDiary", []);
+      diary.push({
+        date: today(),
+        meal: "Перекус",
+        food: recipe.name,
+        amount: recipe.totalWeight ? `${Math.round(recipe.totalWeight)} г` : "1 порция",
+        calories: recipe.calories,
+        protein: recipe.protein,
+        source: "recipe",
+        approximate: recipe.approximate,
+        ingredients: recipe.ingredients
+      });
+
+      write("foodDiary", diary);
+      showToday();
+
+      button.textContent = "Добавлено";
+      setTimeout(() => button.textContent = "Добавить в дневник", 1200);
+    });
+  });
+
+  list.querySelectorAll(".recipe-delete").forEach(button => {
+    button.addEventListener("click", () => {
+      const recipesNow = read("myRecipes", []);
+      recipesNow.splice(Number(button.dataset.recipe), 1);
+      write("myRecipes", recipesNow);
+      renderRecipes();
+    });
+  });
+}
+
+// Начальные строки ингредиентов
+if(!document.querySelector("#ingredientRows .ingredient-row")){
+  addIngredientRow("творог", "180 г");
+  addIngredientRow("ягоды", "80 г");
+}
 
 document.getElementById("saveMorningBtn").addEventListener("click", () => {
   const data = {
