@@ -1,9 +1,13 @@
-const CACHE_NAME = "nutrition-app-v1";
+const CACHE_NAME = "nutrition-app-v2";
 
 const FILES_TO_CACHE = [
   "./",
   "./index.html",
-  "./manifest.json"
+  "./manifest.json",
+  "./icon-192.png",
+  "./icon-512.png",
+  "./apple-touch-icon.png",
+  "./favicon-64.png"
 ];
 
 self.addEventListener("install", event => {
