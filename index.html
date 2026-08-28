@@ -48,7 +48,7 @@
 <body>
 <div class="app">
   <h1>Доброе утро, Ольга</h1>
-  <div class="subtitle">Помощник по питанию, активности и прогрессу — без API</div>
+  <div class="subtitle">Помощник по питанию, активности и прогрессу - в одном месте</div>
 
   <div class="card">
     <h2>Сегодня</h2>
@@ -139,11 +139,9 @@
   padding-bottom: env(safe-area-inset-bottom);
 }
 
-  <button class="secondary" id="exportBtn">Сделать резервную копию</button>
-  <button class="secondary" id="importBtn">Восстановить из копии</button>
-  <input id="importFile" type="file" accept=".json,application/json" style="display:none">
 
-  <p class="note">Данные хранятся только в браузере этого устройства. Регулярно делайте резервную копию. Приложение не заменяет врача и не предназначено для диагностики или лечения.</p>
+
+  <p class="note">Данные сохраняются только на этом устройстве.</p>
 </div>
 
 <script>
@@ -229,9 +227,7 @@ weeklyBtn.addEventListener("click",()=>{weeklyCard.style.display="block";const d
  let decision="Пока оставьте программу без изменений.";if(avgHunger>=7)decision="Голод высокий: не усиливайте дефицит; проверьте регулярность еды и сытость приёмов пищи.";else if(avgKnee>=5)decision="Приоритет — уменьшить нагрузку на колено и не повышать шаги через боль.";
  weeklyResult.innerHTML=`<p>${wtxt}</p><p>Средние шаги: <strong>${Math.round(avgSteps)}</strong><br>Тренировок: <strong>${workouts}</strong><br>Средний вечерний голод: <strong>${avgHunger.toFixed(1)}</strong>/10<br>Средняя боль в колене: <strong>${avgKnee.toFixed(1)}</strong>/10</p><p><strong>Решение:</strong> ${decision}</p>`;weeklyCard.scrollIntoView({behavior:"smooth"})});
 
-exportBtn.addEventListener("click",()=>{const keys=["foodDiary","morningData","weightHistory","dayHistory","endDayCurrent","homeProducts"],data={version:1,exportedAt:new Date().toISOString()};keys.forEach(k=>data[k]=localStorage.getItem(k));const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`nutrition-backup-${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(a.href)});
-importBtn.addEventListener("click",()=>importFile.click());
-importFile.addEventListener("change",async()=>{const f=importFile.files[0];if(!f)return;try{const d=JSON.parse(await f.text());["foodDiary","morningData","weightHistory","dayHistory","endDayCurrent","homeProducts"].forEach(k=>{if(d[k]!==undefined&&d[k]!==null)localStorage.setItem(k,d[k])});alert("Данные восстановлены.");location.reload()}catch{alert("Не удалось прочитать резервную копию.")}});
+
 
 window.addEventListener("load",()=>{const m=read("morningData",{});if(m.date===today()){weight.value=m.weight||"";sleep.value=m.sleep||"";wellbeing.value=m.wellbeing||"";knee.value=m.knee||""}const e=read("endDayCurrent",{});if(e.date===today()){endSteps.value=e.steps||"";endWater.value=e.water||"";endWorkout.value=e.workout||"Нет";endHunger.value=e.hunger||"";endKnee.value=e.knee||"";endComment.value=e.comment||""}showToday()});
 </script>
