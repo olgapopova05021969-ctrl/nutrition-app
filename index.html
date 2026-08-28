@@ -464,7 +464,21 @@ const foodDB = {
   "помидоры": {c:18,p:.9,u:"100g"},
   "сладкий перец": {c:27,p:1,u:"100g"},
   "яйцо": {c:75,p:6.5,u:"piece"},
-  "яйца": {c:75,p:6.5,u:"piece"}
+  "яйца": {c:75,p:6.5,u:"piece"},
+  "овсянка": {c:110,p:3.6,u:"100g"},
+  "овсяная каша": {c:110,p:3.6,u:"100g"},
+  "кефир": {c:53,p:3,u:"100g"},
+  "йогурт натуральный": {c:65,p:5,u:"100g"},
+  "индейка": {c:150,p:29,u:"100g"},
+  "рыба": {c:140,p:22,u:"100g"},
+  "лосось": {c:208,p:20,u:"100g"},
+  "треска": {c:82,p:18,u:"100g"},
+  "говядина": {c:190,p:26,u:"100g"},
+  "свинина": {c:242,p:27,u:"100g"},
+  "морковь": {c:41,p:.9,u:"100g"},
+  "капуста": {c:25,p:1.3,u:"100g"},
+  "апельсин": {c:47,p:.9,u:"100g"},
+  "груша": {c:57,p:.4,u:"100g"}
 };
 
 const today = () => new Date().toLocaleDateString("ru-RU");
@@ -642,34 +656,94 @@ function delFood(todayIndex){
   showToday();
 }
 
-function calcFood(){
-  const name = document.getElementById("foodName").value.trim().toLowerCase();
-  const raw = document.getElementById("foodAmount").value;
-  const amount = parseFloat(raw.replace(",", ".").replace(/[^\d.]/g, ""));
-  const product = foodDB[name];
+function normalizeFoodName(value){
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/ё/g, "е")
+    .replace(/\s+/g, " ");
+}
 
-  if(!product || !amount) return;
+function findProduct(name){
+  const normalized = normalizeFoodName(name);
+
+  if(foodDB[normalized]) return foodDB[normalized];
+
+  const aliases = {
+    "яблоки":"яблоко",
+    "бананы":"банан",
+    "хлеб белый":"хлеб",
+    "хлеб черный":"хлеб",
+    "хлеб ржаной":"хлеб",
+    "сыр твердый":"сыр",
+    "куриная грудка готовая":"куриная грудка",
+    "гречка готовая":"гречка",
+    "рис готовый":"рис",
+    "макароны готовые":"макароны",
+    "картошка":"картофель",
+    "перец":"сладкий перец",
+    "болгарский перец":"сладкий перец"
+  };
+
+  const alias = aliases[normalized];
+  return alias ? foodDB[alias] : null;
+}
+
+function calcFood(){
+  const name = document.getElementById("foodName").value;
+  const raw = document.getElementById("foodAmount").value;
+
+  const amount = parseFloat(
+    String(raw).replace(",", ".").replace(/[^\d.]/g, "")
+  );
+
+  const product = findProduct(name);
+
+  if(!product || !amount || amount <= 0){
+    return false;
+  }
 
   const calories =
-    product.u === "piece" ? product.c * amount : product.c * amount / 100;
+    product.u === "piece"
+      ? product.c * amount
+      : product.c * amount / 100;
 
   const protein =
-    product.u === "piece" ? product.p * amount : product.p * amount / 100;
+    product.u === "piece"
+      ? product.p * amount
+      : product.p * amount / 100;
 
   document.getElementById("foodCalories").value = Math.round(calories);
   document.getElementById("foodProtein").value = protein.toFixed(1);
+
+  return true;
 }
 
-document.getElementById("foodName").addEventListener("change", calcFood);
-document.getElementById("foodAmount").addEventListener("change", calcFood);
+["input","change","blur"].forEach(eventName => {
+  document.getElementById("foodName").addEventListener(eventName, calcFood);
+  document.getElementById("foodAmount").addEventListener(eventName, calcFood);
+});
 
 document.getElementById("saveFoodBtn").addEventListener("click", () => {
   const food = document.getElementById("foodName").value.trim();
+
+  calcFood();
 
   if(!food){
     const result = document.getElementById("foodResult");
     result.style.display = "block";
     result.textContent = "Напишите, что вы съели.";
+    return;
+  }
+
+  const caloriesInput = document.getElementById("foodCalories");
+  const proteinInput = document.getElementById("foodProtein");
+
+  if(caloriesInput.value === "" || proteinInput.value === ""){
+    const result = document.getElementById("foodResult");
+    result.style.display = "block";
+    result.innerHTML =
+      "Этого продукта пока нет во встроенном справочнике. Введите калории и белок вручную или используйте продукт из справочника.";
     return;
   }
 
@@ -680,8 +754,8 @@ document.getElementById("saveFoodBtn").addEventListener("click", () => {
     meal: document.getElementById("mealType").value,
     food,
     amount: document.getElementById("foodAmount").value.trim(),
-    calories: Number(document.getElementById("foodCalories").value) || 0,
-    protein: Number(document.getElementById("foodProtein").value) || 0
+    calories: Number(caloriesInput.value) || 0,
+    protein: Number(proteinInput.value) || 0
   });
 
   write("foodDiary", diary);
