@@ -1,0 +1,10 @@
+{
+  "name": "Мой помощник по питанию",
+  "short_name": "Питание",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f6f4ef",
+  "theme_color": "#3c6e47",
+  "lang": "ru",
+  "icons": []
+}
