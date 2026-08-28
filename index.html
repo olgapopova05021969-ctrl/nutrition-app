@@ -1,252 +1,1030 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#3c6e47">
   <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Питание">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Питание">
 
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" href="favicon-64.png">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="theme-color" content="#3c6e47">
-  <link rel="manifest" href="manifest.json">
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#3c6e47" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
   <title>Мой помощник по питанию</title>
+
   <style>
     :root{
-      --bg:#f6f4ef;--card:#fff;--text:#222;--muted:#6b6b6b;--line:#ded8cf;
-      --green:#3c6e47;--green2:#2f5d39;--green-soft:#eef6ef;--red:#8a2d2d;
-      --red-soft:#f7e6e6;--beige:#f1eee8;--shadow:0 4px 14px rgba(0,0,0,.06);
+      --bg:#f6f4ef;
+      --card:#ffffff;
+      --text:#222222;
+      --muted:#6b6b6b;
+      --line:#ded8cf;
+      --green:#3c6e47;
+      --green-soft:#eef6ef;
+      --red:#8a2d2d;
+      --red-soft:#f7e6e6;
+      --beige:#f1eee8;
+      --shadow:0 4px 14px rgba(0,0,0,.06);
     }
+
     *{box-sizing:border-box}
-    body{margin:0;font-family:Arial,system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text)}
-    .app{width:min(100%,470px);margin:0 auto;padding:18px 16px 44px}
-    h1{font-size:28px;margin:6px 0 6px} h2{font-size:22px;margin:0 0 14px} h3{font-size:17px;margin:16px 0 8px}
-    p{line-height:1.5}.subtitle{color:var(--muted);margin-bottom:20px}
-    .card{background:var(--card);border-radius:18px;padding:18px;margin-bottom:14px;box-shadow:var(--shadow)}
-    .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:var(--beige);border-radius:14px;padding:14px;min-height:82px}
-    .stat strong{display:block;font-size:20px;margin-top:6px}
-    button{width:100%;padding:15px 16px;border:none;border-radius:14px;font-size:17px;margin-bottom:10px;cursor:pointer}
-    button:active{transform:translateY(1px)}.primary{background:var(--green);color:#fff;font-weight:700}.secondary{background:#fff;border:1px solid var(--line)}
-    .danger{background:var(--red-soft);color:var(--red)}.ghost{background:var(--beige)}.small{width:auto;padding:8px 11px;font-size:14px;margin:0}
-    .delete{background:var(--red-soft);color:var(--red)}.form-card{display:none}
-    label{display:block;font-weight:700;margin:12px 0 6px}
-    input,select,textarea{width:100%;padding:13px;border-radius:12px;border:1px solid #ccc;font-size:16px;background:#fff}
-    textarea{min-height:105px;resize:vertical}
-    .result{display:none;background:var(--green-soft);border-radius:14px;padding:14px;margin-top:12px;line-height:1.55}
-    .warning{background:#fff5e6}.food-entry{padding:12px 0;border-bottom:1px solid #eee;line-height:1.5}.food-entry:last-child{border-bottom:none}
-    .row{display:flex;gap:8px;align-items:center;justify-content:space-between}.muted{color:var(--muted);font-size:14px}
-    .pill{display:inline-block;background:var(--beige);padding:5px 9px;border-radius:999px;font-size:13px;margin:3px 4px 3px 0}
-    .progress-bar{height:9px;background:#e9e5de;border-radius:999px;overflow:hidden;margin-top:8px}.progress-bar span{display:block;height:100%;background:var(--green)}
-    .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}.note{font-size:13px;color:var(--muted);line-height:1.45}
+
+    body{
+      margin:0;
+      font-family:Arial,system-ui,-apple-system,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      padding-top:env(safe-area-inset-top);
+      padding-bottom:env(safe-area-inset-bottom);
+    }
+
+    .app{
+      width:min(100%,470px);
+      margin:0 auto;
+      padding:18px 16px 44px;
+    }
+
+    h1{font-size:28px;margin:6px 0 6px}
+    h2{font-size:22px;margin:0 0 14px}
+    h3{font-size:17px;margin:16px 0 8px}
+    p{line-height:1.5}
+
+    .subtitle{
+      color:var(--muted);
+      margin-bottom:20px;
+    }
+
+    .card{
+      background:var(--card);
+      border-radius:18px;
+      padding:18px;
+      margin-bottom:14px;
+      box-shadow:var(--shadow);
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .stat{
+      background:var(--beige);
+      border-radius:14px;
+      padding:14px;
+      min-height:82px;
+    }
+
+    .stat strong{
+      display:block;
+      font-size:20px;
+      margin-top:6px;
+    }
+
+    button{
+      width:100%;
+      padding:15px 16px;
+      border:none;
+      border-radius:14px;
+      font-size:17px;
+      margin-bottom:10px;
+      cursor:pointer;
+    }
+
+    .primary{background:var(--green);color:#fff;font-weight:700}
+    .secondary{background:#fff;border:1px solid var(--line);color:var(--text)}
+    .danger{background:var(--red-soft);color:var(--red)}
+    .ghost{background:var(--beige);color:var(--text)}
+    .small{width:auto;padding:8px 11px;font-size:14px;margin:0}
+    .delete{background:var(--red-soft);color:var(--red)}
+
+    .form-card{display:none}
+
+    label{
+      display:block;
+      font-weight:700;
+      margin:12px 0 6px;
+    }
+
+    input,select,textarea{
+      width:100%;
+      padding:13px;
+      border-radius:12px;
+      border:1px solid #ccc;
+      font-size:16px;
+      background:#fff;
+    }
+
+    textarea{
+      min-height:105px;
+      resize:vertical;
+    }
+
+    .result{
+      display:none;
+      background:var(--green-soft);
+      border-radius:14px;
+      padding:14px;
+      margin-top:12px;
+      line-height:1.55;
+    }
+
+    .warning{background:#fff5e6}
+
+    .food-entry{
+      padding:12px 0;
+      border-bottom:1px solid #eee;
+      line-height:1.5;
+    }
+
+    .food-entry:last-child{border-bottom:none}
+
+    .row{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    .muted{
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .pill{
+      display:inline-block;
+      background:var(--beige);
+      padding:5px 9px;
+      border-radius:999px;
+      font-size:13px;
+      margin:3px 4px 3px 0;
+    }
+
+    .progress-bar{
+      height:9px;
+      background:#e9e5de;
+      border-radius:999px;
+      overflow:hidden;
+      margin-top:8px;
+    }
+
+    .progress-bar span{
+      display:block;
+      height:100%;
+      background:var(--green);
+    }
+
+    .two{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+    }
+
+    .note{
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.45;
+    }
+
+    .setup{display:none}
+    .setup.show{display:block}
+    .main.hidden{display:none}
+
+    .top-actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+    }
   </style>
 </head>
+
 <body>
 <div class="app">
-  <h1>Доброе утро, Ольга</h1>
-  <div class="subtitle">Помощник по питанию, активности и прогрессу - в одном месте</div>
 
-  <div class="card">
-    <h2>Сегодня</h2>
-    <div class="stats">
-      <div class="stat">Калории<strong id="calorieStat">0 / 1700</strong><div class="progress-bar"><span id="calBar" style="width:0%"></span></div></div>
-      <div class="stat">Белок<strong id="proteinStat">0 / 100 г</strong><div class="progress-bar"><span id="proteinBar" style="width:0%"></span></div></div>
-      <div class="stat">Вода<strong id="waterStat">0 / 1.5 л</strong></div>
-      <div class="stat">Шаги<strong id="stepsStat">0</strong></div>
+  <section id="setupScreen" class="setup">
+    <div class="card">
+      <h1>Настройте приложение под себя</h1>
+      <div class="subtitle">Питание, активность и прогресс — в одном месте</div>
+
+      <label for="profileName">Имя</label>
+      <input id="profileName" type="text" placeholder="Например, Анна">
+
+      <div class="two">
+        <div>
+          <label for="profileAge">Возраст</label>
+          <input id="profileAge" type="number" min="18" max="100" placeholder="35">
+        </div>
+        <div>
+          <label for="profileSex">Пол</label>
+          <select id="profileSex">
+            <option value="">Не указывать</option>
+            <option value="female">Женский</option>
+            <option value="male">Мужской</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="two">
+        <div>
+          <label for="profileHeight">Рост, см</label>
+          <input id="profileHeight" type="number" min="120" max="230" placeholder="165">
+        </div>
+        <div>
+          <label for="profileWeight">Вес, кг</label>
+          <input id="profileWeight" type="number" step="0.1" min="35" max="300" placeholder="80">
+        </div>
+      </div>
+
+      <label for="profileGoal">Главная цель</label>
+      <select id="profileGoal">
+        <option value="lose">Снижение веса</option>
+        <option value="maintain">Поддержание веса</option>
+        <option value="habits">Питание и привычки</option>
+      </select>
+
+      <label for="profileCalories">Ориентир калорий на день</label>
+      <input id="profileCalories" type="number" min="1200" max="4000" placeholder="Например, 1800">
+      <div class="note">Если ориентир неизвестен, приложение установит 1800 ккал как техническую стартовую настройку. Это не медицинское назначение.</div>
+
+      <label for="profileProtein">Ориентир белка, г/день</label>
+      <input id="profileProtein" type="number" min="40" max="250" placeholder="Например, 90">
+
+      <label for="profileWater">Ориентир воды, л/день</label>
+      <input id="profileWater" type="number" step="0.1" min="0.5" max="5" placeholder="Например, 1.5">
+
+      <label for="profileSteps">Средние шаги сейчас</label>
+      <input id="profileSteps" type="number" min="0" max="50000" placeholder="Например, 5000">
+
+      <label for="profileLimits">Есть ограничения для тренировок?</label>
+      <select id="profileLimits">
+        <option value="no">Нет</option>
+        <option value="yes">Да</option>
+      </select>
+
+      <label for="profileNotes">Что важно учитывать</label>
+      <textarea id="profileNotes" placeholder="Например: тренируюсь дома, не люблю молоко, есть дискомфорт в колене, люблю сладкое"></textarea>
+
+      <button class="primary" id="saveProfileBtn">Сохранить и начать</button>
     </div>
-  </div>
+  </section>
 
-  <div class="card">
-    <h2>Сегодня съедено</h2>
-    <div id="todayFoodList">Пока нет записей.</div>
-  </div>
+  <section id="mainApp" class="main">
+    <h1 id="greeting">Доброе утро</h1>
+    <div class="subtitle">Питание, активность и прогресс — в одном месте</div>
 
-  <button class="primary" data-open="morningForm">Начать день</button>
-  <div class="card form-card" id="morningForm">
-    <h2>Утренний чек-ин</h2>
-    <label>Вес сегодня, кг</label><input id="weight" type="number" step="0.1" placeholder="104.8">
-    <label>Сон, часов</label><input id="sleep" type="number" step="0.5" placeholder="7">
-    <label>Самочувствие 1–10</label><input id="wellbeing" type="number" min="1" max="10" placeholder="7">
-    <label>Боль в колене 0–10</label><input id="knee" type="number" min="0" max="10" placeholder="3">
-    <button class="primary" id="saveMorningBtn">Сохранить данные</button>
-    <div class="result" id="morningResult"></div>
-  </div>
+    <div class="top-actions">
+      <button class="ghost" id="editProfileBtn">⚙️ Мой профиль</button>
+      <button class="ghost" id="resetDayBtn">↻ Новый день</button>
+    </div>
 
-  <button class="secondary" data-open="foodForm">Добавить еду</button>
-  <div class="card form-card" id="foodForm">
-    <h2>Добавить еду</h2>
-    <label>Что вы съели?</label><input id="foodName" type="text" placeholder="яблоко, яйца, гречка">
-    <label>Количество</label><input id="foodAmount" type="text" placeholder="150 г или 2 шт">
-    <label>Приём пищи</label>
-    <select id="mealType"><option>Завтрак</option><option>Перекус</option><option>Обед</option><option>Ужин</option><option>Сладкое</option></select>
-    <label>Калории</label><input id="foodCalories" type="number" placeholder="авто для известных продуктов">
-    <label>Белок, г</label><input id="foodProtein" type="number" step="0.1" placeholder="авто для известных продуктов">
-    <button class="primary" id="saveFoodBtn">Сохранить еду</button>
-    <div class="result" id="foodResult"></div>
-  </div>
+    <div class="card">
+      <h2>Сегодня</h2>
+      <div class="stats">
+        <div class="stat">
+          Калории
+          <strong id="calorieStat">0 / 1800</strong>
+          <div class="progress-bar"><span id="calBar" style="width:0%"></span></div>
+        </div>
+        <div class="stat">
+          Белок
+          <strong id="proteinStat">0 / 90 г</strong>
+          <div class="progress-bar"><span id="proteinBar" style="width:0%"></span></div>
+        </div>
+        <div class="stat">Вода<strong id="waterStat">0 / 1.5 л</strong></div>
+        <div class="stat">Шаги<strong id="stepsStat">0</strong></div>
+      </div>
+    </div>
 
-  <button class="secondary" id="suggestFoodBtn">Что мне поесть?</button>
-  <div class="card form-card" id="suggestFoodCard"><h2>Что мне поесть?</h2><div id="suggestFoodResult"></div></div>
+    <div class="card">
+      <h2>Сегодня съедено</h2>
+      <div id="todayFoodList">Пока нет записей.</div>
+    </div>
 
-  <button class="secondary" id="sweetBtn">Хочу сладкого</button>
-  <div class="card form-card" id="sweetCard"><h2>Хочу сладкого</h2><div id="sweetResult"></div></div>
+    <button class="primary" data-open="morningForm">Начать день</button>
+    <div class="card form-card" id="morningForm">
+      <h2>Утренний чек-ин</h2>
+      <label for="weight">Вес сегодня, кг</label>
+      <input id="weight" type="number" step="0.1">
 
-  <button class="secondary" id="workoutBtn">Тренировка</button>
-  <div class="card form-card" id="workoutCard"><h2>Тренировка на сегодня</h2><div id="workoutResult"></div></div>
+      <label for="sleep">Сон, часов</label>
+      <input id="sleep" type="number" step="0.5">
 
-  <button class="danger" id="kneeBtn">Колено болит</button>
-  <div class="card form-card" id="kneeCard">
-    <h2>Проверим колено</h2>
-    <label>Боль сейчас 0–10</label><input id="kneePainNow" type="number" min="0" max="10" placeholder="5">
-    <label>Есть отёк, покраснение, нестабильность или трудно опираться на ногу?</label>
-    <select id="kneeRedFlags"><option value="no">Нет</option><option value="yes">Да</option></select>
-    <button class="primary" id="checkKneeBtn">Получить рекомендацию</button>
-    <div class="result warning" id="kneeResult"></div>
-  </div>
+      <label for="wellbeing">Самочувствие 1–10</label>
+      <input id="wellbeing" type="number" min="1" max="10">
 
-  <button class="secondary" id="shoppingBtn">Что купить?</button>
-  <div class="card form-card" id="shoppingCard">
-    <h2>Продукты дома</h2>
-    <textarea id="homeProducts" placeholder="яйца, фарш, гречка, огурцы, яблоки..."></textarea>
-    <button class="ghost" id="saveProductsBtn">Сохранить продукты дома</button>
-    <button class="primary" id="makeShoppingBtn">Список покупок на 3 дня</button>
-    <div class="result" id="shoppingResult"></div>
-  </div>
+      <label for="pain">Боль/дискомфорт 0–10</label>
+      <input id="pain" type="number" min="0" max="10">
 
-  <button class="secondary" id="progressBtn">Мой прогресс</button>
-  <div class="card form-card" id="progressCard"><h2>Мой прогресс</h2><div id="progressResult"></div></div>
+      <button class="primary" id="saveMorningBtn">Сохранить данные</button>
+      <div class="result" id="morningResult"></div>
+    </div>
 
-  <button class="secondary" id="weeklyBtn">Итоги недели</button>
-  <div class="card form-card" id="weeklyCard"><h2>Итоги недели</h2><div id="weeklyResult"></div></div>
+    <button class="secondary" data-open="foodForm">Добавить еду</button>
+    <div class="card form-card" id="foodForm">
+      <h2>Добавить еду</h2>
 
-  <button class="secondary" id="endDayBtn">Закончить день</button>
-  <div class="card form-card" id="endDayCard">
-    <h2>Вечерний отчёт</h2>
-    <label>Шаги сегодня</label><input id="endSteps" type="number" placeholder="4800">
-    <label>Вода, л</label><input id="endWater" type="number" step="0.1" placeholder="1.4">
-    <label>Была тренировка?</label><select id="endWorkout"><option>Нет</option><option>Да</option></select>
-    <label>Голод вечером 1–10</label><input id="endHunger" type="number" min="1" max="10" placeholder="4">
-    <label>Боль в колене вечером 0–10</label><input id="endKnee" type="number" min="0" max="10" placeholder="3">
-    <label>Комментарий</label><textarea id="endComment" placeholder="Что получилось, что было сложно"></textarea>
-    <button class="primary" id="saveEndDayBtn">Сохранить день</button>
-    <div class="result" id="endDayResult"></div>
-  </div>body {
-  padding-top: env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
-}
+      <label for="foodName">Что вы съели?</label>
+      <input id="foodName" type="text" placeholder="Например, яблоко или яйца">
 
+      <label for="foodAmount">Количество</label>
+      <input id="foodAmount" type="text" placeholder="Например, 150 г или 2 шт">
 
+      <label for="mealType">Приём пищи</label>
+      <select id="mealType">
+        <option>Завтрак</option>
+        <option>Перекус</option>
+        <option>Обед</option>
+        <option>Ужин</option>
+        <option>Сладкое</option>
+      </select>
 
-  <p class="note">Данные сохраняются только на этом устройстве.</p>
+      <label for="foodCalories">Калории</label>
+      <input id="foodCalories" type="number">
+
+      <label for="foodProtein">Белок, г</label>
+      <input id="foodProtein" type="number" step="0.1">
+
+      <button class="primary" id="saveFoodBtn">Сохранить еду</button>
+      <div class="result" id="foodResult"></div>
+    </div>
+
+    <button class="secondary" id="suggestFoodBtn">Что мне поесть?</button>
+    <div class="card form-card" id="suggestFoodCard">
+      <h2>Что мне поесть?</h2>
+      <div id="suggestFoodResult"></div>
+    </div>
+
+    <button class="secondary" id="sweetBtn">Хочу сладкого</button>
+    <div class="card form-card" id="sweetCard">
+      <h2>Хочу сладкого</h2>
+      <div id="sweetResult"></div>
+    </div>
+
+    <button class="secondary" id="workoutBtn">Тренировка</button>
+    <div class="card form-card" id="workoutCard">
+      <h2>Тренировка на сегодня</h2>
+      <div id="workoutResult"></div>
+    </div>
+
+    <button class="danger" id="painBtn">Есть боль/дискомфорт</button>
+    <div class="card form-card" id="painCard">
+      <h2>Проверим состояние</h2>
+
+      <label for="painNow">Боль сейчас 0–10</label>
+      <input id="painNow" type="number" min="0" max="10">
+
+      <label for="redFlags">Есть сильный отёк, покраснение, нестабильность, боль в груди, выраженная одышка или трудно нормально двигаться?</label>
+      <select id="redFlags">
+        <option value="no">Нет</option>
+        <option value="yes">Да</option>
+      </select>
+
+      <button class="primary" id="checkPainBtn">Получить рекомендацию</button>
+      <div class="result warning" id="painResult"></div>
+    </div>
+
+    <button class="secondary" id="shoppingBtn">Что купить?</button>
+    <div class="card form-card" id="shoppingCard">
+      <h2>Продукты дома</h2>
+
+      <textarea id="homeProducts" placeholder="Например: яйца, фарш, гречка, огурцы, яблоки"></textarea>
+
+      <button class="ghost" id="saveProductsBtn">Сохранить продукты дома</button>
+      <button class="primary" id="makeShoppingBtn">Список покупок на 3 дня</button>
+
+      <div class="result" id="shoppingResult"></div>
+    </div>
+
+    <button class="secondary" id="progressBtn">Мой прогресс</button>
+    <div class="card form-card" id="progressCard">
+      <h2>Мой прогресс</h2>
+      <div id="progressResult"></div>
+    </div>
+
+    <button class="secondary" id="weeklyBtn">Итоги недели</button>
+    <div class="card form-card" id="weeklyCard">
+      <h2>Итоги недели</h2>
+      <div id="weeklyResult"></div>
+    </div>
+
+    <button class="secondary" id="endDayBtn">Закончить день</button>
+    <div class="card form-card" id="endDayCard">
+      <h2>Вечерний отчёт</h2>
+
+      <label for="endSteps">Шаги сегодня</label>
+      <input id="endSteps" type="number">
+
+      <label for="endWater">Вода, л</label>
+      <input id="endWater" type="number" step="0.1">
+
+      <label for="endWorkout">Была тренировка?</label>
+      <select id="endWorkout">
+        <option>Нет</option>
+        <option>Да</option>
+      </select>
+
+      <label for="endHunger">Голод вечером 1–10</label>
+      <input id="endHunger" type="number" min="1" max="10">
+
+      <label for="endPain">Боль/дискомфорт вечером 0–10</label>
+      <input id="endPain" type="number" min="0" max="10">
+
+      <label for="endComment">Комментарий</label>
+      <textarea id="endComment" placeholder="Что получилось, что было сложно"></textarea>
+
+      <button class="primary" id="saveEndDayBtn">Сохранить день</button>
+      <div class="result" id="endDayResult"></div>
+    </div>
+
+    <p class="note">Данные сохраняются только на этом устройстве.</p>
+  </section>
 </div>
 
 <script>
-const DAY_CALORIES=1700, DAY_PROTEIN=100, DAY_WATER=1.5;
-const foodDB={
-"яблоко":{c:52,p:.3,u:"100g"},"банан":{c:89,p:1.1,u:"100g"},"хлеб":{c:240,p:8,u:"100g"},
-"сыр":{c:350,p:24,u:"100g"},"творог":{c:145,p:17,u:"100g"},"курица":{c:165,p:31,u:"100g"},
-"куриная грудка":{c:165,p:31,u:"100g"},"фарш":{c:220,p:18,u:"100g"},"гречка":{c:110,p:4,u:"100g"},
-"рис":{c:130,p:2.7,u:"100g"},"макароны":{c:150,p:5,u:"100g"},"картофель":{c:80,p:2,u:"100g"},
-"огурец":{c:15,p:.7,u:"100g"},"огурцы":{c:15,p:.7,u:"100g"},"помидор":{c:18,p:.9,u:"100g"},
-"помидоры":{c:18,p:.9,u:"100g"},"сладкий перец":{c:27,p:1,u:"100g"},
-"яйцо":{c:75,p:6.5,u:"piece"},"яйца":{c:75,p:6.5,u:"piece"}
-};
-const today=()=>new Date().toLocaleDateString("ru-RU");
-const read=(k,f)=>{try{return JSON.parse(localStorage.getItem(k))??f}catch{return f}};
-const write=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
-function openCard(id){const e=document.getElementById(id);if(!e)return;e.style.display=e.style.display==="block"?"none":"block";if(e.style.display==="block")e.scrollIntoView({behavior:"smooth"})}
-document.querySelectorAll("[data-open]").forEach(b=>b.addEventListener("click",()=>openCard(b.dataset.open)));
+let profile = {};
 
-function entriesToday(){return read("foodDiary",[]).filter(x=>x.date===today())}
-function totals(){return entriesToday().reduce((a,x)=>({calories:a.calories+(+x.calories||0),protein:a.protein+(+x.protein||0)}),{calories:0,protein:0})}
-function showToday(){
- const es=entriesToday(),t=totals(),end=read("endDayCurrent",{});
- calorieStat.textContent=`${Math.round(t.calories)} / ${DAY_CALORIES}`;proteinStat.textContent=`${t.protein.toFixed(1)} / ${DAY_PROTEIN} г`;
- calBar.style.width=Math.min(t.calories/DAY_CALORIES*100,100)+"%";proteinBar.style.width=Math.min(t.protein/DAY_PROTEIN*100,100)+"%";
- waterStat.textContent=`${end.date===today()?end.water||0:0} / ${DAY_WATER} л`;stepsStat.textContent=end.date===today()?end.steps||0:0;
- if(!es.length){todayFoodList.textContent="Пока нет записей.";return}
- todayFoodList.innerHTML=es.map((x,i)=>`<div class="food-entry"><div class="row"><div><strong>${x.meal}</strong><br>${x.food} ${x.amount||""}<br><span class="muted">${x.calories||0} ккал · ${x.protein||0} г белка</span></div><button class="small delete" onclick="delFood(${i})">Удалить</button></div></div>`).join("");
+const foodDB = {
+  "яблоко": {c:52,p:.3,u:"100g"},
+  "банан": {c:89,p:1.1,u:"100g"},
+  "хлеб": {c:240,p:8,u:"100g"},
+  "сыр": {c:350,p:24,u:"100g"},
+  "творог": {c:145,p:17,u:"100g"},
+  "курица": {c:165,p:31,u:"100g"},
+  "куриная грудка": {c:165,p:31,u:"100g"},
+  "фарш": {c:220,p:18,u:"100g"},
+  "гречка": {c:110,p:4,u:"100g"},
+  "рис": {c:130,p:2.7,u:"100g"},
+  "макароны": {c:150,p:5,u:"100g"},
+  "картофель": {c:80,p:2,u:"100g"},
+  "огурец": {c:15,p:.7,u:"100g"},
+  "огурцы": {c:15,p:.7,u:"100g"},
+  "помидор": {c:18,p:.9,u:"100g"},
+  "помидоры": {c:18,p:.9,u:"100g"},
+  "сладкий перец": {c:27,p:1,u:"100g"},
+  "яйцо": {c:75,p:6.5,u:"piece"},
+  "яйца": {c:75,p:6.5,u:"piece"}
+};
+
+const today = () => new Date().toLocaleDateString("ru-RU");
+
+const read = (key, fallback) => {
+  try {
+    return JSON.parse(localStorage.getItem(key)) ?? fallback;
+  } catch {
+    return fallback;
+  }
+};
+
+const write = (key, value) => {
+  localStorage.setItem(key, JSON.stringify(value));
+};
+
+const targetCalories = () => Number(profile.calories) || 1800;
+const targetProtein = () => Number(profile.protein) || 90;
+const targetWater = () => Number(profile.water) || 1.5;
+
+function applyProfile(){
+  profile = read("userProfile", {});
+
+  if(!profile.name){
+    document.getElementById("setupScreen").classList.add("show");
+    document.getElementById("mainApp").classList.add("hidden");
+    return;
+  }
+
+  document.getElementById("setupScreen").classList.remove("show");
+  document.getElementById("mainApp").classList.remove("hidden");
+  document.getElementById("greeting").textContent = `Доброе утро, ${profile.name}`;
+
+  showToday();
 }
-function delFood(i){const all=read("foodDiary",[]),pos=[];all.forEach((x,j)=>{if(x.date===today())pos.push(j)});if(pos[i]===undefined)return;all.splice(pos[i],1);write("foodDiary",all);showToday()}
+
+document.getElementById("saveProfileBtn").addEventListener("click", () => {
+  const p = {
+    name: document.getElementById("profileName").value.trim(),
+    age: Number(document.getElementById("profileAge").value) || null,
+    sex: document.getElementById("profileSex").value,
+    height: Number(document.getElementById("profileHeight").value) || null,
+    weight: Number(document.getElementById("profileWeight").value) || null,
+    goal: document.getElementById("profileGoal").value,
+    calories: Number(document.getElementById("profileCalories").value) || 1800,
+    protein: Number(document.getElementById("profileProtein").value) || 90,
+    water: Number(document.getElementById("profileWater").value) || 1.5,
+    steps: Number(document.getElementById("profileSteps").value) || 0,
+    limits: document.getElementById("profileLimits").value,
+    notes: document.getElementById("profileNotes").value.trim()
+  };
+
+  if(!p.name){
+    alert("Введите имя.");
+    return;
+  }
+
+  write("userProfile", p);
+
+  if(p.weight){
+    const history = read("weightHistory", []);
+    if(!history.some(x => x.date === today())){
+      history.push({date:today(), weight:p.weight});
+      write("weightHistory", history);
+    }
+  }
+
+  applyProfile();
+});
+
+document.getElementById("editProfileBtn").addEventListener("click", () => {
+  const p = read("userProfile", {});
+
+  document.getElementById("profileName").value = p.name || "";
+  document.getElementById("profileAge").value = p.age || "";
+  document.getElementById("profileSex").value = p.sex || "";
+  document.getElementById("profileHeight").value = p.height || "";
+  document.getElementById("profileWeight").value = p.weight || "";
+  document.getElementById("profileGoal").value = p.goal || "lose";
+  document.getElementById("profileCalories").value = p.calories || "";
+  document.getElementById("profileProtein").value = p.protein || "";
+  document.getElementById("profileWater").value = p.water || "";
+  document.getElementById("profileSteps").value = p.steps || "";
+  document.getElementById("profileLimits").value = p.limits || "no";
+  document.getElementById("profileNotes").value = p.notes || "";
+
+  document.getElementById("setupScreen").classList.add("show");
+  document.getElementById("mainApp").classList.add("hidden");
+});
+
+function openCard(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+
+  el.style.display = el.style.display === "block" ? "none" : "block";
+
+  if(el.style.display === "block"){
+    el.scrollIntoView({behavior:"smooth", block:"start"});
+  }
+}
+
+document.querySelectorAll("[data-open]").forEach(btn => {
+  btn.addEventListener("click", () => openCard(btn.dataset.open));
+});
+
+function entriesToday(){
+  return read("foodDiary", []).filter(x => x.date === today());
+}
+
+function totals(){
+  return entriesToday().reduce((acc, x) => {
+    acc.calories += Number(x.calories) || 0;
+    acc.protein += Number(x.protein) || 0;
+    return acc;
+  }, {calories:0, protein:0});
+}
+
+function showToday(){
+  const entries = entriesToday();
+  const t = totals();
+  const end = read("endDayCurrent", {});
+
+  document.getElementById("calorieStat").textContent =
+    `${Math.round(t.calories)} / ${targetCalories()}`;
+
+  document.getElementById("proteinStat").textContent =
+    `${t.protein.toFixed(1)} / ${targetProtein()} г`;
+
+  document.getElementById("calBar").style.width =
+    Math.min(t.calories / targetCalories() * 100, 100) + "%";
+
+  document.getElementById("proteinBar").style.width =
+    Math.min(t.protein / targetProtein() * 100, 100) + "%";
+
+  document.getElementById("waterStat").textContent =
+    `${end.date === today() ? end.water || 0 : 0} / ${targetWater()} л`;
+
+  document.getElementById("stepsStat").textContent =
+    end.date === today() ? end.steps || 0 : 0;
+
+  const list = document.getElementById("todayFoodList");
+
+  if(!entries.length){
+    list.textContent = "Пока нет записей.";
+    return;
+  }
+
+  list.innerHTML = entries.map((x, i) => `
+    <div class="food-entry">
+      <div class="row">
+        <div>
+          <strong>${x.meal}</strong><br>
+          ${x.food} ${x.amount || ""}<br>
+          <span class="muted">${x.calories || 0} ккал · ${x.protein || 0} г белка</span>
+        </div>
+        <button class="small delete" onclick="delFood(${i})">Удалить</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+function delFood(todayIndex){
+  const all = read("foodDiary", []);
+  const positions = [];
+
+  all.forEach((x, index) => {
+    if(x.date === today()) positions.push(index);
+  });
+
+  const globalIndex = positions[todayIndex];
+  if(globalIndex === undefined) return;
+
+  all.splice(globalIndex, 1);
+  write("foodDiary", all);
+  showToday();
+}
 
 function calcFood(){
- const n=foodName.value.trim().toLowerCase(),a=parseFloat(foodAmount.value.replace(",",".").replace(/[^\d.]/g,"")),p=foodDB[n];
- if(!p||!a)return;
- foodCalories.value=Math.round(p.u==="piece"?p.c*a:p.c*a/100);
- foodProtein.value=(p.u==="piece"?p.p*a:p.p*a/100).toFixed(1);
+  const name = document.getElementById("foodName").value.trim().toLowerCase();
+  const raw = document.getElementById("foodAmount").value;
+  const amount = parseFloat(raw.replace(",", ".").replace(/[^\d.]/g, ""));
+  const product = foodDB[name];
+
+  if(!product || !amount) return;
+
+  const calories =
+    product.u === "piece" ? product.c * amount : product.c * amount / 100;
+
+  const protein =
+    product.u === "piece" ? product.p * amount : product.p * amount / 100;
+
+  document.getElementById("foodCalories").value = Math.round(calories);
+  document.getElementById("foodProtein").value = protein.toFixed(1);
 }
-foodName.addEventListener("change",calcFood);foodAmount.addEventListener("change",calcFood);
-saveFoodBtn.addEventListener("click",()=>{
- const food=foodName.value.trim();if(!food){foodResult.style.display="block";foodResult.textContent="Напишите, что вы съели.";return}
- const d=read("foodDiary",[]);d.push({date:today(),meal:mealType.value,food,amount:foodAmount.value.trim(),calories:+foodCalories.value||0,protein:+foodProtein.value||0});write("foodDiary",d);
- foodResult.style.display="block";foodResult.innerHTML=`<strong>Записано.</strong><br>${mealType.value}: ${food} ${foodAmount.value}<br>${+foodCalories.value||0} ккал · ${+foodProtein.value||0} г белка`;
- foodName.value=foodAmount.value=foodCalories.value=foodProtein.value="";showToday();
+
+document.getElementById("foodName").addEventListener("change", calcFood);
+document.getElementById("foodAmount").addEventListener("change", calcFood);
+
+document.getElementById("saveFoodBtn").addEventListener("click", () => {
+  const food = document.getElementById("foodName").value.trim();
+
+  if(!food){
+    const result = document.getElementById("foodResult");
+    result.style.display = "block";
+    result.textContent = "Напишите, что вы съели.";
+    return;
+  }
+
+  const diary = read("foodDiary", []);
+
+  diary.push({
+    date: today(),
+    meal: document.getElementById("mealType").value,
+    food,
+    amount: document.getElementById("foodAmount").value.trim(),
+    calories: Number(document.getElementById("foodCalories").value) || 0,
+    protein: Number(document.getElementById("foodProtein").value) || 0
+  });
+
+  write("foodDiary", diary);
+
+  const result = document.getElementById("foodResult");
+  result.style.display = "block";
+  result.innerHTML = `<strong>Записано.</strong>`;
+
+  document.getElementById("foodName").value = "";
+  document.getElementById("foodAmount").value = "";
+  document.getElementById("foodCalories").value = "";
+  document.getElementById("foodProtein").value = "";
+
+  showToday();
 });
 
-saveMorningBtn.addEventListener("click",()=>{
- const d={date:today(),weight:weight.value,sleep:sleep.value,wellbeing:wellbeing.value,knee:knee.value};write("morningData",d);
- if(d.weight){const h=read("weightHistory",[]),i=h.findIndex(x=>x.date===d.date),r={date:d.date,weight:+d.weight};i>=0?h[i]=r:h.push(r);write("weightHistory",h)}
- morningResult.style.display="block";morningResult.innerHTML=`<strong>Данные сохранены.</strong><br>Вес: ${d.weight||"—"} кг<br>Сон: ${d.sleep||"—"} ч<br>Самочувствие: ${d.wellbeing||"—"}/10<br>Колено: ${d.knee||"—"}/10`;
+document.getElementById("saveMorningBtn").addEventListener("click", () => {
+  const data = {
+    date: today(),
+    weight: document.getElementById("weight").value,
+    sleep: document.getElementById("sleep").value,
+    wellbeing: document.getElementById("wellbeing").value,
+    pain: document.getElementById("pain").value
+  };
+
+  write("morningData", data);
+
+  if(data.weight){
+    const history = read("weightHistory", []);
+    const index = history.findIndex(x => x.date === data.date);
+    const row = {date:data.date, weight:Number(data.weight)};
+
+    if(index >= 0) history[index] = row;
+    else history.push(row);
+
+    write("weightHistory", history);
+  }
+
+  const result = document.getElementById("morningResult");
+  result.style.display = "block";
+  result.innerHTML = `
+    <strong>Данные сохранены.</strong><br>
+    Вес: ${data.weight || "—"} кг<br>
+    Сон: ${data.sleep || "—"} ч<br>
+    Самочувствие: ${data.wellbeing || "—"}/10<br>
+    Боль/дискомфорт: ${data.pain || "—"}/10
+  `;
 });
 
-suggestFoodBtn.addEventListener("click",()=>{
- suggestFoodCard.style.display="block";const t=totals(),lc=Math.max(DAY_CALORIES-t.calories,0),lp=Math.max(DAY_PROTEIN-t.protein,0),home=(localStorage.getItem("homeProducts")||"").toLowerCase(),o=[];
- if(home.includes("фарш"))o.push("Фарш 120–150 г + овощи + небольшая порция гречки или макарон.");
- if(home.includes("яйц"))o.push("2 яйца + овощи; при сильном голоде добавить небольшой гарнир.");
- if(home.includes("творог"))o.push("Творог 150–200 г + фрукт.");
- if(home.includes("кур"))o.push("Курица 120–150 г + овощи + гарнир.");
- while(o.length<3)o.push(["Белковый продукт + овощи + небольшой гарнир.","Омлет из 2 яиц с овощами.","Белковый продукт + фрукт или овощи."][o.length]);
- suggestFoodResult.innerHTML=`<p>Уже: <strong>${Math.round(t.calories)} ккал</strong> и <strong>${t.protein.toFixed(1)} г белка</strong>.</p><p>Осталось: <strong>${Math.round(lc)} ккал</strong> и <strong>${lp.toFixed(1)} г белка</strong>.</p>${o.slice(0,3).map((x,i)=>`<p><strong>${i+1}.</strong> ${x}</p>`).join("")}`;
- suggestFoodCard.scrollIntoView({behavior:"smooth"});
+document.getElementById("suggestFoodBtn").addEventListener("click", () => {
+  const card = document.getElementById("suggestFoodCard");
+  card.style.display = "block";
+
+  const t = totals();
+  const caloriesLeft = Math.max(targetCalories() - t.calories, 0);
+  const proteinLeft = Math.max(targetProtein() - t.protein, 0);
+
+  const home = (localStorage.getItem("homeProducts") || "").toLowerCase();
+  const options = [];
+
+  if(home.includes("фарш")) options.push("Фарш 120–150 г + овощи + небольшая порция гарнира.");
+  if(home.includes("яйц")) options.push("2 яйца + овощи; при сильном голоде добавить небольшой гарнир.");
+  if(home.includes("творог")) options.push("Творог 150–200 г + фрукт.");
+  if(home.includes("кур")) options.push("Курица 120–150 г + овощи + гарнир.");
+
+  const fallback = [
+    "Белковый продукт + овощи + небольшой гарнир.",
+    "Омлет из 2 яиц с овощами.",
+    "Белковый продукт + фрукт или овощи."
+  ];
+
+  while(options.length < 3){
+    options.push(fallback[options.length]);
+  }
+
+  document.getElementById("suggestFoodResult").innerHTML = `
+    <p>Уже: <strong>${Math.round(t.calories)} ккал</strong> и <strong>${t.protein.toFixed(1)} г белка</strong>.</p>
+    <p>Осталось ориентировочно: <strong>${Math.round(caloriesLeft)} ккал</strong> и <strong>${proteinLeft.toFixed(1)} г белка</strong>.</p>
+    ${options.slice(0,3).map((x,i) => `<p><strong>${i+1}.</strong> ${x}</p>`).join("")}
+  `;
+
+  card.scrollIntoView({behavior:"smooth"});
 });
 
-sweetBtn.addEventListener("click",()=>{sweetCard.style.display="block";const left=Math.max(DAY_CALORIES-totals().calories,0);sweetResult.innerHTML=`<p>${left>=200?"Можно выбрать порцию сладкого примерно на 100–200 ккал и съесть её после основного приёма пищи.":left>=100?"Место для небольшой порции ещё есть. Лучше заранее отделить порцию и убрать упаковку.":"Запас небольшой. Если хочется сладкого — небольшая порция допустима; не компенсируйте её голодом или тренировкой."}</p><p>Осталось ориентировочно <strong>${Math.round(left)} ккал</strong>.</p>`;sweetCard.scrollIntoView({behavior:"smooth"})});
+document.getElementById("sweetBtn").addEventListener("click", () => {
+  const card = document.getElementById("sweetCard");
+  card.style.display = "block";
 
-workoutBtn.addEventListener("click",()=>{workoutCard.style.display="block";const k=+read("morningData",{}).knee||0;workoutResult.innerHTML=k>=5?`<p><strong>Сегодня щадящий режим.</strong></p><p>10–15 минут: движения стопами сидя, сведение лопаток, мягкое напряжение живота, упражнения для верхней части тела без боли.</p><p>Без приседаний, выпадов и прыжков.</p>`:`<p><strong>Щадящая тренировка 20–25 минут.</strong></p><p>1. Отжимания от стены — 2×8–10.<br>2. Сведение лопаток сидя — 2×10.<br>3. Тяга резинки сидя — 2×10, если есть резинка.<br>4. Напряжение бедра сидя — 2×8 без боли.<br>5. Движения стопами — 2×12.<br>6. Мягкое напряжение живота — 2×8.</p><p class="muted">Остановитесь, если боль усиливается.</p>`;workoutCard.scrollIntoView({behavior:"smooth"})});
+  const left = Math.max(targetCalories() - totals().calories, 0);
 
-kneeBtn.addEventListener("click",()=>openCard("kneeCard"));
-checkKneeBtn.addEventListener("click",()=>{kneeResult.style.display="block";const p=+kneePainNow.value||0;kneeResult.innerHTML=kneeRedFlags.value==="yes"?"<strong>Нагрузку на ногу лучше прекратить.</strong><br>При выраженном отёке, покраснении, нестабильности, резком ограничении движения или невозможности нормально опираться на ногу нужна медицинская оценка.":p>=6?"Уменьшите ходьбу и упражнения для ноги. Если боль сохраняется или нарастает, нужна медицинская оценка.":"Оставьте только движения, которые не усиливают боль, и следите за реакцией колена вечером и на следующий день."});
+  let text;
+  if(left >= 200){
+    text = "Можно заранее отделить небольшую порцию сладкого и съесть её после основного приёма пищи.";
+  } else if(left >= 100){
+    text = "Место для небольшой порции ещё есть. Лучше заранее отделить её и убрать упаковку.";
+  } else {
+    text = "Сегодня запас небольшой. Если хочется сладкого — выберите маленькую порцию и не компенсируйте её голодом или тренировкой.";
+  }
 
-shoppingBtn.addEventListener("click",()=>{openCard("shoppingCard");homeProducts.value=localStorage.getItem("homeProducts")||""});
-saveProductsBtn.addEventListener("click",()=>{localStorage.setItem("homeProducts",homeProducts.value.trim());shoppingResult.style.display="block";shoppingResult.textContent="Продукты дома сохранены."});
-makeShoppingBtn.addEventListener("click",()=>{const h=homeProducts.value.toLowerCase(),need=[],opt=[];if(!/кур|рыб|творог|фарш|яйц/.test(h))need.push("белковый продукт");if(!/огур|капуст|морков|перец|овощ/.test(h))need.push("овощи на 3 дня");if(!/яблок|банан|фрукт/.test(h))need.push("фрукты");if(!/греч|рис|макарон|картоф/.test(h))opt.push("гарнир: гречка, рис, макароны или картофель");shoppingResult.style.display="block";shoppingResult.innerHTML=`<h3>Нужно купить</h3>${need.length?need.map(x=>`<span class="pill">${x}</span>`).join(""):"Основные категории уже есть."}<h3>Можно докупить</h3>${opt.length?opt.map(x=>`<span class="pill">${x}</span>`).join(""):"Ничего обязательного."}`});
+  document.getElementById("sweetResult").innerHTML =
+    `<p>${text}</p><p>Осталось ориентировочно <strong>${Math.round(left)} ккал</strong>.</p>`;
 
-progressBtn.addEventListener("click",()=>{progressCard.style.display="block";const h=read("weightHistory",[]);progressResult.innerHTML=h.length?`<p>Первый вес: <strong>${h[0].weight} кг</strong><br>Последний: <strong>${h[h.length-1].weight} кг</strong><br>Изменение: <strong>${(h[h.length-1].weight-h[0].weight).toFixed(1)} кг</strong></p>`+h.slice(-10).reverse().map(x=>`<div class="food-entry">${x.date}: <strong>${x.weight} кг</strong></div>`).join(""):"Пока нет сохранённых взвешиваний.";progressCard.scrollIntoView({behavior:"smooth"})});
+  card.scrollIntoView({behavior:"smooth"});
+});
 
-endDayBtn.addEventListener("click",()=>openCard("endDayCard"));
-saveEndDayBtn.addEventListener("click",()=>{const d={date:today(),steps:+endSteps.value||0,water:+endWater.value||0,workout:endWorkout.value,hunger:+endHunger.value||0,knee:+endKnee.value||0,comment:endComment.value.trim(),totals:totals()};write("endDayCurrent",d);const h=read("dayHistory",[]),i=h.findIndex(x=>x.date===d.date);i>=0?h[i]=d:h.push(d);write("dayHistory",h);endDayResult.style.display="block";endDayResult.innerHTML=`<strong>День сохранён.</strong><br>Шаги: ${d.steps}<br>Вода: ${d.water} л<br>Тренировка: ${d.workout}<br>Голод: ${d.hunger||"—"}/10<br>Колено: ${d.knee||"—"}/10`;showToday()});
+document.getElementById("workoutBtn").addEventListener("click", () => {
+  const card = document.getElementById("workoutCard");
+  card.style.display = "block";
 
-weeklyBtn.addEventListener("click",()=>{weeklyCard.style.display="block";const days=read("dayHistory",[]).slice(-7),wh=read("weightHistory",[]).slice(-7);if(!days.length&&!wh.length){weeklyResult.innerHTML="Пока недостаточно данных для недельного отчёта.";return}
- const avg=(arr,key)=>arr.length?arr.reduce((s,x)=>s+(+x[key]||0),0)/arr.length:0;
- const avgSteps=avg(days,"steps"),avgHunger=avg(days,"hunger"),avgKnee=avg(days,"knee"),workouts=days.filter(x=>x.workout==="Да").length;
- let wtxt="Недостаточно измерений веса.";if(wh.length>=2){const a=wh.reduce((s,x)=>s+x.weight,0)/wh.length;wtxt=`Средний вес по доступным измерениям: <strong>${a.toFixed(1)} кг</strong>.`}
- let decision="Пока оставьте программу без изменений.";if(avgHunger>=7)decision="Голод высокий: не усиливайте дефицит; проверьте регулярность еды и сытость приёмов пищи.";else if(avgKnee>=5)decision="Приоритет — уменьшить нагрузку на колено и не повышать шаги через боль.";
- weeklyResult.innerHTML=`<p>${wtxt}</p><p>Средние шаги: <strong>${Math.round(avgSteps)}</strong><br>Тренировок: <strong>${workouts}</strong><br>Средний вечерний голод: <strong>${avgHunger.toFixed(1)}</strong>/10<br>Средняя боль в колене: <strong>${avgKnee.toFixed(1)}</strong>/10</p><p><strong>Решение:</strong> ${decision}</p>`;weeklyCard.scrollIntoView({behavior:"smooth"})});
+  const morning = read("morningData", {});
+  const painLevel = Number(morning.pain) || 0;
+  const limited = profile.limits === "yes";
 
+  document.getElementById("workoutResult").innerHTML =
+    (limited || painLevel >= 5)
+      ? `
+        <p><strong>Сегодня щадящий режим.</strong></p>
+        <p>Выбирайте только знакомые упражнения, которые не усиливают симптомы: спокойная ходьба по переносимости, движения стопами, сведение лопаток, лёгкие упражнения сидя.</p>
+        <p>Не тренируйтесь через нарастающую боль.</p>
+      `
+      : `
+        <p><strong>Умеренная тренировка 20–30 минут.</strong></p>
+        <p>
+          1. Разминка — 5 минут.<br>
+          2. Отжимания от стены — 2×8–12.<br>
+          3. Сведение лопаток — 2×10.<br>
+          4. Мягкие упражнения на корпус — 2×8–10.<br>
+          5. Спокойная ходьба или лёгкая домашняя активность — 10–15 минут.
+        </p>
+      `;
 
+  card.scrollIntoView({behavior:"smooth"});
+});
 
-window.addEventListener("load",()=>{const m=read("morningData",{});if(m.date===today()){weight.value=m.weight||"";sleep.value=m.sleep||"";wellbeing.value=m.wellbeing||"";knee.value=m.knee||""}const e=read("endDayCurrent",{});if(e.date===today()){endSteps.value=e.steps||"";endWater.value=e.water||"";endWorkout.value=e.workout||"Нет";endHunger.value=e.hunger||"";endKnee.value=e.knee||"";endComment.value=e.comment||""}showToday()});
-</script>
-<script>
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("./service-worker.js");
-}
-</script>
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", function () {
-    navigator.serviceWorker
-      .register("./service-worker.js")
-      .then(function () {
-        console.log("Service Worker подключён");
-      })
-      .catch(function (error) {
-        console.log("Ошибка Service Worker:", error);
-      });
+document.getElementById("painBtn").addEventListener("click", () => openCard("painCard"));
+
+document.getElementById("checkPainBtn").addEventListener("click", () => {
+  const result = document.getElementById("painResult");
+  result.style.display = "block";
+
+  const painLevel = Number(document.getElementById("painNow").value) || 0;
+  const red = document.getElementById("redFlags").value;
+
+  if(red === "yes"){
+    result.innerHTML = "<strong>Сегодня тренировку лучше прекратить.</strong><br>При выраженных или новых тревожных симптомах нужна медицинская оценка.";
+  } else if(painLevel >= 6){
+    result.innerHTML = "Снизьте нагрузку и не выполняйте движения, усиливающие боль. Если боль сохраняется или нарастает, обратитесь за медицинской оценкой.";
+  } else {
+    result.innerHTML = "Оставьте только комфортные движения и следите за самочувствием сегодня и на следующий день.";
+  }
+});
+
+document.getElementById("shoppingBtn").addEventListener("click", () => {
+  openCard("shoppingCard");
+  document.getElementById("homeProducts").value =
+    localStorage.getItem("homeProducts") || "";
+});
+
+document.getElementById("saveProductsBtn").addEventListener("click", () => {
+  localStorage.setItem(
+    "homeProducts",
+    document.getElementById("homeProducts").value.trim()
+  );
+
+  const result = document.getElementById("shoppingResult");
+  result.style.display = "block";
+  result.textContent = "Продукты дома сохранены.";
+});
+
+document.getElementById("makeShoppingBtn").addEventListener("click", () => {
+  const home = document.getElementById("homeProducts").value.toLowerCase();
+  const need = [];
+  const optional = [];
+
+  if(!/кур|рыб|творог|фарш|яйц|боб/.test(home)) need.push("белковый продукт");
+  if(!/огур|капуст|морков|перец|овощ/.test(home)) need.push("овощи на 3 дня");
+  if(!/яблок|банан|фрукт/.test(home)) need.push("фрукты");
+  if(!/греч|рис|макарон|картоф/.test(home)) optional.push("удобный гарнир");
+
+  const result = document.getElementById("shoppingResult");
+  result.style.display = "block";
+  result.innerHTML = `
+    <h3>Нужно купить</h3>
+    ${need.length ? need.map(x => `<span class="pill">${x}</span>`).join("") : "Основные категории уже есть."}
+    <h3>Можно докупить</h3>
+    ${optional.length ? optional.map(x => `<span class="pill">${x}</span>`).join("") : "Ничего обязательного."}
+  `;
+});
+
+document.getElementById("progressBtn").addEventListener("click", () => {
+  const card = document.getElementById("progressCard");
+  card.style.display = "block";
+
+  const history = read("weightHistory", []);
+  const result = document.getElementById("progressResult");
+
+  if(!history.length){
+    result.textContent = "Пока нет сохранённых взвешиваний.";
+  } else {
+    const first = history[0];
+    const last = history[history.length - 1];
+
+    result.innerHTML = `
+      <p>
+        Первый вес: <strong>${first.weight} кг</strong><br>
+        Последний: <strong>${last.weight} кг</strong><br>
+        Изменение: <strong>${(last.weight - first.weight).toFixed(1)} кг</strong>
+      </p>
+      ${history.slice(-10).reverse().map(x =>
+        `<div class="food-entry">${x.date}: <strong>${x.weight} кг</strong></div>`
+      ).join("")}
+    `;
+  }
+
+  card.scrollIntoView({behavior:"smooth"});
+});
+
+document.getElementById("weeklyBtn").addEventListener("click", () => {
+  const card = document.getElementById("weeklyCard");
+  card.style.display = "block";
+
+  const days = read("dayHistory", []).slice(-7);
+  const weights = read("weightHistory", []).slice(-7);
+  const result = document.getElementById("weeklyResult");
+
+  if(!days.length && !weights.length){
+    result.textContent = "Пока недостаточно данных для недельного отчёта.";
+    return;
+  }
+
+  const avg = (arr, key) =>
+    arr.length
+      ? arr.reduce((sum, x) => sum + (Number(x[key]) || 0), 0) / arr.length
+      : 0;
+
+  const avgSteps = avg(days, "steps");
+  const avgHunger = avg(days, "hunger");
+  const avgPain = avg(days, "pain");
+  const workouts = days.filter(x => x.workout === "Да").length;
+
+  let weightText = "Недостаточно измерений веса.";
+
+  if(weights.length >= 2){
+    const avgWeight =
+      weights.reduce((sum, x) => sum + Number(x.weight), 0) / weights.length;
+
+    weightText =
+      `Средний вес по доступным измерениям: <strong>${avgWeight.toFixed(1)} кг</strong>.`;
+  }
+
+  let decision = "Пока оставьте режим без изменений.";
+
+  if(avgHunger >= 7){
+    decision = "Голод высокий: не усиливайте ограничения; проверьте регулярность и сытость приёмов пищи.";
+  } else if(avgPain >= 5){
+    decision = "Приоритет — уменьшить нагрузку и не увеличивать активность через боль.";
+  }
+
+  result.innerHTML = `
+    <p>${weightText}</p>
+    <p>
+      Средние шаги: <strong>${Math.round(avgSteps)}</strong><br>
+      Тренировок: <strong>${workouts}</strong><br>
+      Средний вечерний голод: <strong>${avgHunger.toFixed(1)}</strong>/10<br>
+      Средняя боль/дискомфорт: <strong>${avgPain.toFixed(1)}</strong>/10
+    </p>
+    <p><strong>Решение:</strong> ${decision}</p>
+  `;
+
+  card.scrollIntoView({behavior:"smooth"});
+});
+
+document.getElementById("endDayBtn").addEventListener("click", () => openCard("endDayCard"));
+
+document.getElementById("saveEndDayBtn").addEventListener("click", () => {
+  const data = {
+    date: today(),
+    steps: Number(document.getElementById("endSteps").value) || 0,
+    water: Number(document.getElementById("endWater").value) || 0,
+    workout: document.getElementById("endWorkout").value,
+    hunger: Number(document.getElementById("endHunger").value) || 0,
+    pain: Number(document.getElementById("endPain").value) || 0,
+    comment: document.getElementById("endComment").value.trim(),
+    totals: totals()
+  };
+
+  write("endDayCurrent", data);
+
+  const history = read("dayHistory", []);
+  const index = history.findIndex(x => x.date === data.date);
+
+  if(index >= 0) history[index] = data;
+  else history.push(data);
+
+  write("dayHistory", history);
+
+  const result = document.getElementById("endDayResult");
+  result.style.display = "block";
+  result.innerHTML = `
+    <strong>День сохранён.</strong><br>
+    Шаги: ${data.steps}<br>
+    Вода: ${data.water} л<br>
+    Тренировка: ${data.workout}<br>
+    Голод: ${data.hunger || "—"}/10<br>
+    Боль/дискомфорт: ${data.pain || "—"}/10
+  `;
+
+  showToday();
+});
+
+document.getElementById("resetDayBtn").addEventListener("click", () => {
+  if(confirm("Очистить только текущие поля дня? История прошлых дней сохранится.")){
+    localStorage.removeItem("morningData");
+    localStorage.removeItem("endDayCurrent");
+    location.reload();
+  }
+});
+
+window.addEventListener("load", () => {
+  applyProfile();
+
+  const morning = read("morningData", {});
+  if(morning.date === today()){
+    document.getElementById("weight").value = morning.weight || "";
+    document.getElementById("sleep").value = morning.sleep || "";
+    document.getElementById("wellbeing").value = morning.wellbeing || "";
+    document.getElementById("pain").value = morning.pain || "";
+  }
+
+  const end = read("endDayCurrent", {});
+  if(end.date === today()){
+    document.getElementById("endSteps").value = end.steps || "";
+    document.getElementById("endWater").value = end.water || "";
+    document.getElementById("endWorkout").value = end.workout || "Нет";
+    document.getElementById("endHunger").value = end.hunger || "";
+    document.getElementById("endPain").value = end.pain || "";
+    document.getElementById("endComment").value = end.comment || "";
+  }
+});
+
+if("serviceWorker" in navigator){
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js").catch(() => {});
   });
 }
 </script>
